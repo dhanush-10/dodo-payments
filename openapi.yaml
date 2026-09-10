@@ -1,0 +1,285 @@
+openapi: 3.0.3
+info:
+  title: Dodo Invoice Service API
+  version: 1.0.0
+  description: Invoice & Payment Service API
+
+servers:
+  - url: http://localhost:3000/api
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: invalid_state_transition
+        message:
+          type: string
+        details:
+          type: string
+          nullable: true
+
+    Business:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        api_key:
+          type: string
+          description: Only present in the create-business response. Never retrievable again.
+
+    ApiKeyInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key_prefix:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        revoked_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        business_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateCustomerRequest:
+      type: object
+      required: [name, email]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+
+    LineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        invoice_id:
+          type: string
+          format: uuid
+        description:
+          type: string
+        quantity:
+          type: integer
+        unit_amount_cents:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        business_id:
+          type: string
+          format: uuid
+        customer_id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum: [draft, open, paid, void, uncollectible]
+        total_cents:
+          type: integer
+        due_date:
+          type: string
+          format: date
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    CreateInvoiceRequest:
+      type: object
+      required: [customer_id, line_items, due_date]
+      properties:
+        customer_id:
+          type: string
+          format: uuid
+        line_items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [description, quantity, unit_amount_cents]
+            properties:
+              description:
+                type: string
+              quantity:
+                type: integer
+                minimum: 1
+              unit_amount_cents:
+                type: integer
+                minimum: 1
+        due_date:
+          type: string
+          format: date
+
+    PaymentRequest:
+      type: object
+      required: [card_token]
+      properties:
+        card_token:
+          type: string
+          example: tok_success
+
+    PaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        invoice_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, succeeded, failed]
+        psp_reference:
+          type: string
+          format: uuid
+          nullable: true
+        error_code:
+          type: string
+          nullable: true
+        requested_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    CreateWebhookRequest:
+      type: object
+      required: [url]
+      properties:
+        url:
+          type: string
+          format: uri
+
+    WebhookResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+        secret:
+          type: string
+          description: Only present in the registration response. Never retrievable again.
+
+security:
+  - BearerAuth: []
+
+paths:
+  /businesses:
+    post:
+      summary: Create a business and receive its API key (shown once)
+      operationId: createBusiness
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Business created with API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Business'
+
+  /businesses/keys:
+    get:
+      summary: List API keys for the authenticated business
+      operationId: listKeys
+      responses:
+        '200':
+          description: API keys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKeyInfo'
+
+  /businesses/keys/{key_id}:
+    delete:
+      summary: Revoke an API key
+      operationId: revokeKey
+      parameters:
+        - name: key_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Key revoked
+        '404':
+          description: Key not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /customers:
+    post:
+      summary: Create customer
+      operationId: createCustomer
+      requestBody:
