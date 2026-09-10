@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, endpoint_id, event_type, payload, signature, attempt,\n                  status as \"status: DeliveryStatus\",\n                  response_status, response_body, error_message,\n                  scheduled_at, completed_at, created_at, updated_at\n           FROM webhook_deliveries\n           WHERE status = 'pending'\n             AND scheduled_at <= $1\n           ORDER BY created_at ASC\n           LIMIT 100",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "endpoint_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "event_type",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "payload",
+        "type_info": "Jsonb"
+      },
+      {
+        "ordinal": 4,
+        "name": "signature",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "attempt",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 6,
+        "name": "status: DeliveryStatus",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "response_status",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "response_body",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 9,
+        "name": "error_message",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 10,
+        "name": "scheduled_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 11,
+        "name": "completed_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 12,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 13,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      false
+    ]
+  },
+  "hash": "315d22783bbb81d8b35f8a8654e8dec45b95910f25d0c566a5ca774a9e529d47"
+}

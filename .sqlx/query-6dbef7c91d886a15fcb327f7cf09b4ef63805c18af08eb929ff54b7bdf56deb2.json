@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, business_id, key_prefix, key_hash, created_at, revoked_at \n         FROM api_keys \n         WHERE key_prefix = $1 AND revoked_at IS NULL",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "business_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "key_prefix",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "key_hash",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "revoked_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "6dbef7c91d886a15fcb327f7cf09b4ef63805c18af08eb929ff54b7bdf56deb2"
+}

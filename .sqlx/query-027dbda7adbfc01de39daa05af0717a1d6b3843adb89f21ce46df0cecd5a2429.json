@@ -1,0 +1,77 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, invoice_id, idempotency_key, psp_reference,\n                  status as \"status: PaymentStatus\",\n                  error_code, error_message, requested_at, completed_at, created_at\n           FROM payment_attempts\n           WHERE invoice_id = $1 AND idempotency_key = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "invoice_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "idempotency_key",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "psp_reference",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 4,
+        "name": "status: PaymentStatus",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "error_code",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "error_message",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "requested_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "completed_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "027dbda7adbfc01de39daa05af0717a1d6b3843adb89f21ce46df0cecd5a2429"
+}

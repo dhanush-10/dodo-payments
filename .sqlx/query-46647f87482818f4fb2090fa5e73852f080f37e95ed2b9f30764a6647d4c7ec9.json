@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        UPDATE invoices\n        SET state = $1,\n            version = version + 1,\n            updated_at = NOW()\n        WHERE id = $2 AND version = $3\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Uuid",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "46647f87482818f4fb2090fa5e73852f080f37e95ed2b9f30764a6647d4c7ec9"
+}

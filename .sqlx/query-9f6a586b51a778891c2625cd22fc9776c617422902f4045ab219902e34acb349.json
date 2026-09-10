@@ -1,0 +1,79 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO invoices (\n            business_id,\n            customer_id,\n            state,\n            total_cents,\n            due_date\n        )\n        VALUES ($1, $2, 'draft', $3, $4)\n        RETURNING\n            id,\n            business_id,\n            customer_id,\n            state as \"state: InvoiceState\",\n            total_cents,\n            due_date,\n            created_at,\n            updated_at,\n            paid_at,\n            version\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "business_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "customer_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 3,
+        "name": "state: InvoiceState",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "total_cents",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 5,
+        "name": "due_date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 6,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 7,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "paid_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "version",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Int4",
+        "Date"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "9f6a586b51a778891c2625cd22fc9776c617422902f4045ab219902e34acb349"
+}

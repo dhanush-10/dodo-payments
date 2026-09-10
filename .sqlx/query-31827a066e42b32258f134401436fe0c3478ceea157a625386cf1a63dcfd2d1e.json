@@ -1,0 +1,77 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT\n                id,\n                business_id,\n                customer_id,\n                state as \"state: InvoiceState\",\n                total_cents,\n                due_date,\n                created_at,\n                updated_at,\n                paid_at,\n                version\n            FROM invoices\n            WHERE business_id = $1\n              AND state = $2\n            ORDER BY created_at DESC\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "business_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 2,
+        "name": "customer_id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 3,
+        "name": "state: InvoiceState",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "total_cents",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 5,
+        "name": "due_date",
+        "type_info": "Date"
+      },
+      {
+        "ordinal": 6,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 7,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 8,
+        "name": "paid_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 9,
+        "name": "version",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "hash": "31827a066e42b32258f134401436fe0c3478ceea157a625386cf1a63dcfd2d1e"
+}
