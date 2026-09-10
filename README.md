@@ -22,7 +22,7 @@ See [`AI_USAGE.md`](AI_USAGE.md) for details about how AI tools were used during
 
 ## Demo Video
 
-**Demo:** [::TODO]
+**Demo:** : https://uploadnow.io/files/N5VBzWg
 
 The demo walks through the complete flow:
 
